@@ -11,10 +11,8 @@ import pandas as pd
 app = Flask(__name__)
 CORS(app)
 
-
 ##################################################################################################################
 
-# DFF TODO A real service would have more robust health check methods.
 # This path simply echoes to check that the app is working.
 # The path is /health and the only method is GETs
 @app.route("/health", methods=["GET"])
@@ -26,8 +24,7 @@ def health_check():
 
 
 # The method take any REST request, and produces a response indicating what
-# the parameters, headers, etc. are. This is simply for education purposes.
-#
+# the parameters, headers, etc. are.
 @app.route("/api/demo/<parameter1>", methods=["GET", "POST", "PUT", "DELETE"])
 @app.route("/api/demo/", methods=["GET", "POST", "PUT", "DELETE"])
 def demo(parameter1=None):
@@ -37,13 +34,9 @@ def demo(parameter1=None):
     :param parameter1: The first path parameter.
     :return: JSON document containing information about the request.
     """
-
-    # Mostly for isolation. The rest of the method is isolated from the specifics of Flask.
     inputs = rest_utils.RESTContext(request, {"parameter1": parameter1})
     data = inputs.data
     data = data[0]
-    # data['config'] = data['config'].strip('[]').split(',')
-    # data['filter_tags'] = data['filter_tags'].strip('[]').split(',')
 
     df = pd.DataFrame(data, index=[0])
     df.loc[0, 'config'] = df.loc[0, 'config'].strip('[]').split(',')
@@ -60,11 +53,9 @@ def demo(parameter1=None):
 
 ##################################################################################################################
 
-
 @app.route('/')
 def hello_world():
     return '<u>Hello World!</u>'
-
 
 
 if __name__ == '__main__':
